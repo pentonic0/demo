@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from "@/src/lib/sbAdmin";
 import { v4 as uuidv4 } from 'uuid';
+import { getSession } from '@/src/lib/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -11,7 +12,6 @@ const ALLOWED_TYPES = new Set([
   'image/png',
   'image/webp',
   'image/gif',
-  'image/svg+xml',
   'application/pdf',
 ]);
 
@@ -59,7 +59,6 @@ function getExtension(mimeType: string) {
     case 'image/png': return '.png';
     case 'image/webp': return '.webp';
     case 'image/gif': return '.gif';
-    case 'image/svg+xml': return '.svg';
     case 'application/pdf': return '.pdf';
     default: return '';
   }
@@ -67,6 +66,11 @@ function getExtension(mimeType: string) {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getSession();
+    if (!session || session.role !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const ip = getClientIp(req);
     if (!checkRateLimit(ip)) {
       return NextResponse.json({ error: 'Too many upload requests. Please try again later.' }, { status: 429 });

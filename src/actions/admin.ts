@@ -3,6 +3,8 @@
 import { supabaseAdmin } from "../lib/sbAdmin";
 import { getSession, hashPassword } from "@/src/lib/auth";
 
+const ALLOWED_GENERIC_TABLES = new Set(['gallery', 'committee', 'staff', 'sliders', 'academic', 'messages']);
+
 async function requireAdmin() {
   const session = await getSession();
   if (!session || session.role !== 'admin') {
@@ -165,6 +167,9 @@ export async function deleteTeacherAction(id: string) {
 // For simplicity, a generic insert/update/delete for simple tables
 export async function createGenericAction(table: string, dbData: any) {
   await requireAdmin();
+  if (!ALLOWED_GENERIC_TABLES.has(table)) {
+    throw new Error('Invalid table');
+  }
   const { error } = await supabaseAdmin.from(table).insert(dbData);
   if (error) throw error;
   return { success: true };
@@ -172,6 +177,9 @@ export async function createGenericAction(table: string, dbData: any) {
 
 export async function updateGenericAction(table: string, id: string, dbData: any) {
   await requireAdmin();
+  if (!ALLOWED_GENERIC_TABLES.has(table)) {
+    throw new Error('Invalid table');
+  }
   const { error } = await supabaseAdmin.from(table).update(dbData).eq('id', id);
   if (error) throw error;
   return { success: true };
@@ -179,6 +187,9 @@ export async function updateGenericAction(table: string, id: string, dbData: any
 
 export async function deleteGenericAction(table: string, id: string) {
   await requireAdmin();
+  if (!ALLOWED_GENERIC_TABLES.has(table)) {
+    throw new Error('Invalid table');
+  }
   const { error } = await supabaseAdmin.from(table).delete().eq('id', id);
   if (error) throw error;
   return { success: true };

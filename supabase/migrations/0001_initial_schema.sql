@@ -173,7 +173,6 @@ CREATE POLICY "Allow public read access on notices" ON public.notices FOR SELECT
 CREATE POLICY "Allow public read access on teachers" ON public.teachers FOR SELECT USING (true);
 CREATE POLICY "Allow public read access on staff" ON public.staff FOR SELECT USING (true);
 CREATE POLICY "Allow public read access on gallery" ON public.gallery FOR SELECT USING (true);
-CREATE POLICY "Allow public read access on messages" ON public.messages FOR SELECT USING (true);
 CREATE POLICY "Allow public read access on committee" ON public.committee FOR SELECT USING (true);
 CREATE POLICY "Allow public read access on academic" ON public.academic FOR SELECT USING (true);
 CREATE POLICY "Allow public read access on sliders" ON public.sliders FOR SELECT USING (true);
@@ -181,10 +180,5 @@ CREATE POLICY "Allow public read access on settings" ON public.settings FOR SELE
 
 -- No public write access (Only Server/Admin API will do writes using Service Role Key which bypasses RLS)
 
-
--- Seed default admin login
-INSERT INTO public.admins (username, password_hash, role)
-VALUES ('admin', '$2b$10$9ypu/TnQVf1BWbuaViedlOVVTYfGj84VXpyMsGx6XxBm0cKfcJti.', 'admin')
-ON CONFLICT (username) DO NOTHING;
 
 CREATE POLICY "Allow public insert on messages" ON public.messages FOR INSERT WITH CHECK (true);

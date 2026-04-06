@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Anek Bangla", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Anek Bangla", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-bangla: "Anek Bangla", sans-serif;
+  
+  --color-brand-primary: #064e3b; /* Emerald 900 */
+  --color-brand-secondary: #065f46; /* Emerald 800 */
+  --color-brand-accent: #f59e0b; /* Amber 500 */
+}
+
+@layer utilities {
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
+}
